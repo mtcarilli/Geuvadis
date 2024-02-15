@@ -1,4 +1,9 @@
 # functions for normalizing gene expression and creating .bed file from gtf and gene expression matrix
+import pandas as pd
+import numpy as np
+import functools
+import scipy.stats as stats
+
 
 def build_gene_location_df(gtf_file_path, genes_to_use):
     genes = []
@@ -106,13 +111,12 @@ def get_phenotype_bed(adata,layer,gtf_path,save_path):
 
   adata.var['gene_id'] = genes_to_use
   adata.obs.index = adata.obs.obs_names
-  expression_df = pd.DataFrame( { 
-                ind : np.array(adata[adata.obs.Individual==ind].layers[layer].todense()).flatten() for ind in adata.obs.Individual.values} ) 
+  expression_df = pd.DataFrame( {ind : np.array(adata[adata.obs.Individual==ind].layers[layer].todense()).flatten() for ind in adata.obs.Individual.values} ) 
   expression_df['gene_id'] = adata.var.gene_id.values
   bed_df = pd.merge(gene_df,expression_df,on='gene_id',sort=False)
   bed_df = bed_df.sort_values(['chr', 'start'], ascending=[True, True])
   bed_df.to_csv(save_path,sep='\t',index=False)
-  # !sed -i '1s/^/#/' $save_path
+  !sed -i '1s/^/#/' $save_path
 
   
 # functions for normalization 
@@ -176,8 +180,8 @@ def RPKM(array,gene_lengths):
 
     return(rpkm_array)
 
-def log1p(array)
-adata.X = np.log1p(np.asarray(adata.X))
+def log1p(array):
+     return(np.log1p(array))
 
 
 

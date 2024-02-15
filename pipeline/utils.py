@@ -112,7 +112,7 @@ def get_phenotype_bed(adata,layer,gtf_path,save_path):
   bed_df = pd.merge(gene_df,expression_df,on='gene_id',sort=False)
   bed_df = bed_df.sort_values(['chr', 'start'], ascending=[True, True])
   bed_df.to_csv(save_path,sep='\t',index=False)
-  !sed -i '1s/^/#/' $save_path
+  # !sed -i '1s/^/#/' $save_path
 
   
 # functions for normalization 

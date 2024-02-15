@@ -2,8 +2,9 @@
 import pandas as pd
 import numpy as np
 import scipy.stats as stats
-import functools
 import gzip
+import functools
+
 
 
 def build_gene_location_df(gtf_file_path, genes_to_use):

@@ -1,8 +1,9 @@
 # functions for normalizing gene expression and creating .bed file from gtf and gene expression matrix
 import pandas as pd
 import numpy as np
-import functools
 import scipy.stats as stats
+import functools
+import gzip
 
 
 def build_gene_location_df(gtf_file_path, genes_to_use):

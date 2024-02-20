@@ -93,8 +93,11 @@ def get_gene_lengths_df(gtf_file_path, genes_to_use):
                 #     chromosomes.append(chrom)
                 #     s1_list.append(s1)
                 #     s2_list.append(s2)
-                    
-    return pd.DataFrame({'chr' : chromosomes, 'start' : s1_list, 'end' : s2_list,'gene_id' : genes})
+
+    gene_order_df_ = pd.DataFrame({'gene_id' : genes_to_use})
+    gene_length_df_ = pd.DataFrame({'chr' : chromosomes, 'start' : s1_list, 'end' : s2_list,'gene_id' : genes})
+    gene_lengths_df = gene_order_df_ .merge(gene_lengths_df_, on = 'gene_id')
+    return gene_lengths_df
 
 def get_phenotype_bed(adata,layer,gtf_path,save_path):
   '''saves phenotype values in .bed format to save path.
@@ -144,6 +147,8 @@ def inverse_normal_transform(array):
     ''' Transform each row of expression (sample expression) to the inverse normal distribution. 
     USES BLOM METHOD: https://www.statsdirect.com/help/data_preparation/transform_normal_scores.htm 
     '''
+
+    array_T = array.T # want to transform the row, being genes, to inverse normal
     
     # rank each array 
     new_array = np.ones_like(array,dtype = float)
@@ -153,7 +158,7 @@ def inverse_normal_transform(array):
             inv_val = stats.norm.ppf(val_quantile)
             new_array[i,j] = inv_val
             
-    return(new_array)
+    return(new_array.T)
 
 def TPM(array,gene_lengths):
     ''' 

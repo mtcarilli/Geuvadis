@@ -95,7 +95,8 @@ def get_gene_lengths_df(gtf_file_path, genes_to_use):
                 #     s2_list.append(s2)
 
     gene_order_df_ = pd.DataFrame({'gene_id' : genes_to_use})
-    gene_length_df_ = pd.DataFrame({'chr' : chromosomes, 'start' : s1_list, 'end' : s2_list,'gene_id' : genes})
+    gene_length_df_ = pd.DataFrame({'chr' : chromosomes, 'start' : s1_list, 'end' : s2_list,'gene_id' : genes,
+                                    'gene_length' : np.array(s2_list) - np.array(s1_list) })
     gene_lengths_df = gene_order_df_ .merge(gene_lengths_df_, on = 'gene_id')
     return gene_lengths_df
 

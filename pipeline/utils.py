@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import scipy.stats as stats
+from sklearn import preprocessing
 import gzip
 import functools
 
@@ -97,7 +98,7 @@ def get_gene_lengths_df(gtf_file_path, genes_to_use):
     gene_order_df_ = pd.DataFrame({'gene_id' : genes_to_use})
     gene_lengths_df_ = pd.DataFrame({'chr' : chromosomes, 'start' : s1_list, 'end' : s2_list,'gene_id' : genes,
                                     'gene_length' : np.array(s2_list) - np.array(s1_list) })
-    gene_lengths_df = gene_order_df_ .merge(gene_lengths_df_, on = 'gene_id')
+    gene_lengths_df = gene_order_df_.merge(gene_lengths_df_, on = 'gene_id')
     return gene_lengths_df
 
 def get_phenotype_bed(adata,layer,gtf_path,save_path):
@@ -126,14 +127,9 @@ def get_phenotype_bed(adata,layer,gtf_path,save_path):
 
   
 # functions for normalization 
-def quantile_normalize(df):
-    """Quantile normalizes a pandas DataFrame.
-      From PCCA github
-      https://stackoverflow.com/questions/37935920/quantile-normalization-on-pandas-dataframe
-      Args:
-        df: A pandas DataFrame
-      Returns:
-        The dataframe where all columns have the same distribution.
+def quantile_normalize(array):
+    """Quantile normalizes an array. Columns will have
+      
       """
     rank_mean = df.stack().groupby(
     df.rank(method='first').stack().astype(int)).mean()
